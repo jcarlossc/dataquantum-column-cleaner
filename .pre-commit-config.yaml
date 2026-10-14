@@ -1,5 +1,5 @@
+
 repos:
-  # Basic file checks.
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
@@ -9,15 +9,13 @@ repos:
       - id: check-toml
       - id: check-merge-conflict
 
-  # Static analysis and Python formatting.
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.0
+    rev: v0.17.0
     hooks:
       - id: ruff
         args: [--fix]
       - id: ruff-format
 
-  # Type checking.
   - repo: local
     hooks:
       - id: mypy
@@ -26,16 +24,8 @@ repos:
         language: system
         pass_filenames: false
 
-      # Executes the automated tests.
-      - id: pytest
-        name: pytest
-        entry: poetry run pytest
-        language: system
-        pass_filenames: false
-
-      # Runs tests with coverage.
       - id: pytest-cov
-        name: pytest-cov
-        entry: poetry run pytest --cov=dataquantum_column_cleaner --cov-report=term-missing
+        name: pytest with coverage
+        entry: poetry run pytest --cov=dataquantum_column_cleaner --cov-report=term-missing --cov-fail-under=90
         language: system
         pass_filenames: false

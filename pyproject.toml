@@ -69,6 +69,12 @@ build = "poetry build"
 publish-test = "poetry publish --repository testpypi"
 publish = "poetry publish"
 
+# Verificação completa antes da publicação.
+release-check = "ruff check . && mypy src && pytest --cov=dataquantum_column_cleaner --cov-report=term-missing --cov-fail-under=90"
+
+# Construção do pacote após a validação.
+release-build = "poetry build"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
