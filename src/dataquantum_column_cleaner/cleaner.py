@@ -27,12 +27,12 @@ def clean_column_names(df: pd.DataFrame) -> pd.DataFrame:
     # Creates an empty list to store the cleaned column names.
     cleaned_names: list[str] = []
 
-    # Creates a set to store names that have already been 
+    # Creates a set to store names that have already been
     # used and avoid duplicates.
     used_names: set[str] = set()
 
     for column in result.columns:
-        # Converts the name to text, removes leading and trailing spaces, 
+        # Converts the name to text, removes leading and trailing spaces,
         # and converts letters to lowercase.
         name = str(column).strip().lower()
 
@@ -45,7 +45,7 @@ def clean_column_names(df: pd.DataFrame) -> pd.DataFrame:
         # Remove leading and trailing underscores.
         name = name.strip("_")
 
-        # Uses `name` if it is not empty; otherwise, 
+        # Uses `name` if it is not empty; otherwise,
         # uses "column" as the default name.
         base_name = name or "column"
 
