@@ -1,0 +1,9 @@
+{
+  "packages": {
+    ".": {
+      "release-type": "python",
+      "package-name": "dataquantum-column-cleaner",
+      "include-component-in-tag": false
+    }
+  }
+}
