@@ -1,75 +1,79 @@
 """Utilities for cleaning and standardizing DataFrame column names."""
 
 import re
+import unicodedata
 
 import pandas as pd
 
 
-def clean_column_names(df: pd.DataFrame) -> pd.DataFrame:
-    """Standardize column names and ensure their uniqueness.
+def clean_column_names(
+    df: pd.DataFrame,
+    remove_accents: bool = True,
+) -> pd.DataFrame:
+    """Standardize DataFrame column names and ensure uniqueness.
 
-    The function converts names to lowercase, replaces whitespace and
-    hyphens with underscores, removes unsupported characters, and adds
-    numeric suffixes when normalized names collide.
+    Names are converted to lowercase, whitespace and hyphens are replaced
+    with underscores, unsupported characters are removed, and numeric
+    suffixes are added when normalized names collide.
+
+    Accent removal is enabled by default and can be disabled.
 
     The original DataFrame is not modified.
 
     Args:
         df: DataFrame whose column names should be standardized.
+        remove_accents: Whether to remove accents from column names.
+            Defaults to True.
 
     Returns:
         A copy of the DataFrame with unique, standardized column names.
+
+    Raises:
+        TypeError: If df is not a pandas DataFrame.
+        TypeError: If remove_accents is not a boolean.
     """
+    if not isinstance(df, pd.DataFrame):
+        raise TypeError("df must be a pandas DataFrame.")
 
-    # Creates a copy of the original DataFrame.
+    if not isinstance(remove_accents, bool):
+        raise TypeError("remove_accents must be a boolean.")
+
     result = df.copy()
-
-    # Creates an empty list to store the cleaned column names.
     cleaned_names: list[str] = []
-
-    # Creates a set to store names that have already been
-    # used and avoid duplicates.
     used_names: set[str] = set()
 
     for column in result.columns:
-        # Converts the name to text, removes leading and trailing spaces,
-        # and converts letters to lowercase.
         name = str(column).strip().lower()
+
+        # Remove accents when requested.
+        if remove_accents:
+            name = unicodedata.normalize("NFKD", name)
+            name = "".join(
+                character for character in name if not unicodedata.combining(character)
+            )
 
         # Normalize whitespace and hyphens.
         name = re.sub(r"[\s-]+", "_", name)
 
-        # Remove characters other than word characters and underscores.
+        # Remove unsupported characters.
         name = re.sub(r"[^\w]", "", name)
 
         # Remove leading and trailing underscores.
         name = name.strip("_")
 
-        # Uses `name` if it is not empty; otherwise,
-        # uses "column" as the default name.
+        # Use a fallback for empty names.
         base_name = name or "column"
-
-        # Defines the initial column name.
         unique_name = base_name
-
-        # Initializes the counter used to generate numeric suffixes.
         counter = 1
 
-        # Find a name that has not been used.
+        # Ensure that each name is unique.
         while unique_name in used_names:
-            # adds a numeric suffix to the name, such as sales_1.
             unique_name = f"{base_name}_{counter}"
-
-            # Increments the counter by 1 to try another suffix, if necessary.
             counter += 1
 
-        # Adds the final name to the list of cleaned names.
         cleaned_names.append(unique_name)
-
-        # Registers the name in the set of names already used.
         used_names.add(unique_name)
 
-    # Replaces the column names of the copy with clean, unique names.
     result.columns = cleaned_names
 
     return result
