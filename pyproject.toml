@@ -8,6 +8,7 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.11,<4.0"
 dependencies = [
+    "pandas (>=3.0.6,<4.0.0)"
 ]
 
 [tool.poetry]
@@ -16,6 +17,9 @@ packages = [{include = "dataquantum_column_cleaner", from = "src"}]
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+cleaner = "dataquantum_column_cleaner.main:main"
 
 [dependency-groups]
 dev = [
