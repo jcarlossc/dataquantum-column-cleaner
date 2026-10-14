@@ -1,33 +1,102 @@
 [project]
 name = "dataquantum-column-cleaner"
 version = "0.1.0"
-description = ""
+description = "Clean and standardize Pandas DataFrame column names."
 authors = [
-    {name = "jcarlossc",email = "jcarlossc1977@gmail.com"}
+    { name = "jcarlossc", email = "jcarlossc.dev@gmail.com" }
 ]
 readme = "README.md"
+license = "MIT"
 requires-python = ">=3.11,<4.0"
-dependencies = [
-    "pandas (>=3.0.6,<4.0.0)",
-    "pandas-stubs (>=3.0.5.260914,<4.0.0.0)"
+
+keywords = [
+    "pandas",
+    "data-cleaning",
+    "data-quality",
+    "etl",
+    "column-names"
 ]
 
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+dependencies = [
+    "pandas (>=3.0.0,<4.0.0)"
+]
+
+[project.urls]
+Homepage = "https://github.com/jcarlossc/dataquantum-column-cleaner"
+Repository = "https://github.com/jcarlossc/dataquantum-column-cleaner"
+
 [tool.poetry]
-packages = [{include = "dataquantum_column_cleaner", from = "src"}]
+packages = [
+    { include = "dataquantum_column_cleaner", from = "src" }
+]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-cleaner = "dataquantum_column_cleaner.main:main"
 
 [dependency-groups]
 dev = [
     "mypy (>=2.4.0,<3.0.0)",
+    "pandas-stubs (>=3.0.5.260914,<4.0.0.0)",
     "ruff (>=0.17.0,<0.18.0)",
     "pytest (>=9.1.1,<10.0.0)",
     "pytest-cov (>=7.1.0,<8.0.0)",
     "pre-commit (>=4.7.0,<5.0.0)",
     "taskipy (>=1.14.1,<2.0.0)"
 ]
+
+[tool.taskipy.tasks]
+test = "pytest -v"
+cov = "pytest --cov=dataquantum_column_cleaner --cov-report=term-missing --cov-report=html"
+lint = "ruff check ."
+format = "ruff format ."
+typecheck = "mypy src"
+check = "ruff check . && mypy src && pytest -v"
+fix = "poetry run ruff check . --fix"
+build = "poetry build"
+publish-test = "poetry publish --repository testpypi"
+publish = "poetry publish"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.coverage.run]
+source = ["dataquantum_column_cleaner"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 90
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.mypy]
+python_version = "3.11"
+mypy_path = "src"
+files = ["src"]
+warn_return_any = true
+warn_unused_configs = true
+check_untyped_defs = true
+disallow_untyped_defs = true
