@@ -1,6 +1,6 @@
 [project]
 name = "dataquantum-column-cleaner"
-version = "0.1.0"
+version = "0.2.0"
 description = "Clean and standardize Pandas DataFrame column names."
 authors = [
     { name = "jcarlossc", email = "jcarlossc.dev@gmail.com" }
