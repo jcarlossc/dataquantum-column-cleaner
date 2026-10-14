@@ -71,9 +71,12 @@ def clean_column_names(
             unique_name = f"{base_name}_{counter}"
             counter += 1
 
+        # Adds the final name to the list of cleaned names.
         cleaned_names.append(unique_name)
+        # Registers the name in the set of names already used.
         used_names.add(unique_name)
 
+    # Replaces the column names of the copy with clean, unique names.
     result.columns = cleaned_names
 
     return result
