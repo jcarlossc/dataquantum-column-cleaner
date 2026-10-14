@@ -1,0 +1,41 @@
+repos:
+  # Verificações básicas de arquivos.
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+
+  # Análise estática e formatação Python.
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.0
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  # Verificação de tipos.
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: poetry run mypy src
+        language: system
+        pass_filenames: false
+
+      # Executa os testes automatizados.
+      - id: pytest
+        name: pytest
+        entry: poetry run pytest
+        language: system
+        pass_filenames: false
+
+      # Executa os testes com cobertura.
+      - id: pytest-cov
+        name: pytest-cov
+        entry: poetry run pytest --cov=dataquantum_column_cleaner --cov-report=term-missing
+        language: system
+        pass_filenames: false

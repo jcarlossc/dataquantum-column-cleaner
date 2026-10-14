@@ -1,8 +1,6 @@
-
 """Tests for the column-cleaning utilities."""
 
 import pandas as pd
-from pandas.testing import assert_frame_equal
 
 from dataquantum_column_cleaner.cleaner import clean_column_names
 
